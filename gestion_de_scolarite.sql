@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3306
--- Généré le : lun. 16 mai 2022 à 19:23
--- Version du serveur : 5.7.36
--- Version de PHP : 7.4.26
+-- Hôte : 127.0.0.1:3309
+-- Généré le :  lun. 29 août 2022 à 18:40
+-- Version du serveur :  5.7.24
+-- Version de PHP :  7.2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,25 +19,25 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `gestion_de_scolarite`
+-- Base de données :  `gestion_de_scolarite`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `coefficient`
+-- Structure de la table `coeficient`
 --
 
-DROP TABLE IF EXISTS `coefficient`;
-CREATE TABLE IF NOT EXISTS `coefficient` (
+DROP TABLE IF EXISTS `coeficient`;
+CREATE TABLE IF NOT EXISTS `coeficient` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `codefil` varchar(255) NOT NULL,
-  `codemat` varchar(255) NOT NULL,
+  `codemat` int(11) NOT NULL,
+  `codefil` int(11) NOT NULL,
   `coef` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `codefil` (`codefil`),
-  KEY `codemat` (`codemat`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `codemat` (`codemat`),
+  KEY `codefil` (`codefil`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -46,14 +47,14 @@ CREATE TABLE IF NOT EXISTS `coefficient` (
 
 DROP TABLE IF EXISTS `composition`;
 CREATE TABLE IF NOT EXISTS `composition` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `numins` int(11) NOT NULL,
-  `datecomp` date NOT NULL,
-  `notecomp` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `numins` (`numins`),
-  KEY `datecomp` (`datecomp`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `Datreg` int(11) NOT NULL AUTO_INCREMENT,
+  `Numins` int(11) NOT NULL,
+  `Codemat` int(11) NOT NULL,
+  `Notecomp` varchar(11) NOT NULL,
+  PRIMARY KEY (`Datreg`),
+  KEY `Numins` (`Numins`),
+  KEY `Codemat` (`Codemat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -63,44 +64,42 @@ CREATE TABLE IF NOT EXISTS `composition` (
 
 DROP TABLE IF EXISTS `echeance`;
 CREATE TABLE IF NOT EXISTS `echeance` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `numech` int(11) NOT NULL AUTO_INCREMENT,
   `numins` int(11) NOT NULL,
-  `numech` int(11) NOT NULL,
-  `datech` date NOT NULL,
-  `montech` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `numins` (`numins`),
-  KEY `numech` (`numech`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `datech` varchar(0) NOT NULL,
+  `montech` varchar(11) NOT NULL,
+  PRIMARY KEY (`numech`),
+  KEY `numins` (`numins`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `etudiants`
+-- Structure de la table `etudiant`
 --
 
-DROP TABLE IF EXISTS `etudiants`;
-CREATE TABLE IF NOT EXISTS `etudiants` (
+DROP TABLE IF EXISTS `etudiant`;
+CREATE TABLE IF NOT EXISTS `etudiant` (
   `matricule` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) NOT NULL,
-  `prenom` varchar(255) NOT NULL,
-  `sexe` varchar(255) NOT NULL,
+  `nom` varchar(255) DEFAULT NULL,
+  `prenom` varchar(255) DEFAULT NULL,
+  `sexe` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`matricule`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `filliere`
+-- Structure de la table `filiere`
 --
 
-DROP TABLE IF EXISTS `filliere`;
-CREATE TABLE IF NOT EXISTS `filliere` (
-  `codefil` varchar(255) NOT NULL,
-  `libfil` varchar(255) NOT NULL,
-  `cout` int(11) NOT NULL,
-  PRIMARY KEY (`codefil`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `filiere`;
+CREATE TABLE IF NOT EXISTS `filiere` (
+  `codefif` int(11) NOT NULL AUTO_INCREMENT,
+  `libfil` varchar(255) DEFAULT NULL,
+  `cout` varchar(11) DEFAULT NULL,
+  PRIMARY KEY (`codefif`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -111,14 +110,14 @@ CREATE TABLE IF NOT EXISTS `filliere` (
 DROP TABLE IF EXISTS `inscription`;
 CREATE TABLE IF NOT EXISTS `inscription` (
   `numins` int(11) NOT NULL AUTO_INCREMENT,
-  `dateinscription` date NOT NULL,
-  `anne` year(4) NOT NULL,
   `matricule` int(11) NOT NULL,
-  `codefil` varchar(255) NOT NULL,
+  `codefil` int(11) NOT NULL,
+  `dateins` varchar(0) DEFAULT NULL,
+  `annee` varchar(0) DEFAULT NULL,
   PRIMARY KEY (`numins`),
   KEY `matricule` (`matricule`),
   KEY `codefil` (`codefil`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -128,10 +127,10 @@ CREATE TABLE IF NOT EXISTS `inscription` (
 
 DROP TABLE IF EXISTS `matiere`;
 CREATE TABLE IF NOT EXISTS `matiere` (
-  `codmat` varchar(255) NOT NULL,
+  `codemat` int(11) NOT NULL AUTO_INCREMENT,
   `libmat` varchar(255) NOT NULL,
-  PRIMARY KEY (`codmat`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`codemat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -141,33 +140,32 @@ CREATE TABLE IF NOT EXISTS `matiere` (
 
 DROP TABLE IF EXISTS `reglement`;
 CREATE TABLE IF NOT EXISTS `reglement` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datreg` date NOT NULL,
+  `datreg` int(11) NOT NULL AUTO_INCREMENT,
   `numins` int(11) NOT NULL,
   `numech` int(11) NOT NULL,
-  `montreg` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `datreg` (`datreg`),
+  `montreg` varchar(11) NOT NULL,
+  PRIMARY KEY (`datreg`),
   KEY `numins` (`numins`),
-  KEY `numech` (`numech`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `Numech` (`numech`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `coefficient`
+-- Contraintes pour la table `coeficient`
 --
-ALTER TABLE `coefficient`
-  ADD CONSTRAINT `coefficient_filiere_codefil` FOREIGN KEY (`codefil`) REFERENCES `filliere` (`codefil`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `coefficient_matiere_codemat` FOREIGN KEY (`codemat`) REFERENCES `matiere` (`codmat`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `coeficient`
+  ADD CONSTRAINT `coeficient_filiere_codefil` FOREIGN KEY (`codefil`) REFERENCES `filiere` (`codefif`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `coeficient_matiere_codemat` FOREIGN KEY (`codemat`) REFERENCES `matiere` (`codemat`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `composition`
 --
 ALTER TABLE `composition`
-  ADD CONSTRAINT `composition_inscription_numins` FOREIGN KEY (`numins`) REFERENCES `inscription` (`numins`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `composition_inscription_numins` FOREIGN KEY (`Numins`) REFERENCES `inscription` (`numins`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `composition_matiere_codemat` FOREIGN KEY (`Codemat`) REFERENCES `matiere` (`codemat`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `echeance`
@@ -179,15 +177,15 @@ ALTER TABLE `echeance`
 -- Contraintes pour la table `inscription`
 --
 ALTER TABLE `inscription`
-  ADD CONSTRAINT `inscription_etudiants_matricule` FOREIGN KEY (`matricule`) REFERENCES `etudiants` (`matricule`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inscription_filiere_codefil` FOREIGN KEY (`codefil`) REFERENCES `filliere` (`codefil`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `inscription_etudiant_matricule` FOREIGN KEY (`matricule`) REFERENCES `etudiant` (`matricule`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `inscription_filiere_codefil` FOREIGN KEY (`codefil`) REFERENCES `filiere` (`codefif`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `reglement`
 --
 ALTER TABLE `reglement`
   ADD CONSTRAINT `reglement_echeance_numech` FOREIGN KEY (`numech`) REFERENCES `echeance` (`numech`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `reglement_inscription_numins` FOREIGN KEY (`numins`) REFERENCES `inscription` (`numins`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `reglement_inscription_nuins` FOREIGN KEY (`numins`) REFERENCES `inscription` (`numins`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
